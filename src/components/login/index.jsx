@@ -38,13 +38,13 @@ const Login = () => {
       onSubmit={handleSubmit}
     >
       <div className="col w-100">
-        <div className="row w-50 m-auto">
+        <div className="row w-25 m-auto">
           <img src={logo} alt="logo" />
         </div>
         <div className="row w-25 m-auto">
           <div className="mb-3 p-0">
             <label for="username" className="form-label">
-              Username
+              اسم المستخدم
             </label>
             <input
               type="text"
@@ -55,7 +55,7 @@ const Login = () => {
           </div>
           <div className="mb-3 p-0">
             <label for="exampleInputPassword1" className="form-label">
-              Password
+              كلمة المرور
             </label>
             <input
               type="password"

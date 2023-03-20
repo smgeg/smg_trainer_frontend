@@ -1,15 +1,27 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import Navbar from "../global/navbar";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 function RegistrationPage() {
+  const formSchema = Yup.object().shape({
+    username: Yup.string().required("مطلوب اسم المستخدم"),
+    password: Yup.string()
+      .required("مطلوب كلمة المرور")
+      .min(3, "Password must be at 3 char long"),
+    confirmPassword: Yup.string()
+      .required("مطلوب تأكيد كلمة المرور")
+      .oneOf([Yup.ref("password")], "كلمة المرور غير متطابقة"),
+  });
+  const formOptions = { resolver: yupResolver(formSchema) };
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm(formOptions);
 
   const onSubmit = (data) => {
-    console.log(data);
+    console.log(data, errors);
   };
 
   const [selectedOption, setSelectedOption] = useState("individual");
@@ -101,10 +113,8 @@ function RegistrationPage() {
   ];
   return (
     <div>
-      <Navbar />
-
       <div className="container  align-items-center justify-content-center">
-        <h1 className="mb-5">تسجيل حساب جديد</h1>
+        <h1 className="mb-5 mt-5 text-center">تسجيل حساب جديد</h1>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="col-md-6 mb-3 mx-auto">
@@ -114,9 +124,12 @@ function RegistrationPage() {
             <input
               {...register("username")}
               type="text"
-              className="form-control"
+              className={`form-control ${errors.username ? "is-invalid" : ""}`}
               id="inputUsername"
             />
+            <div className="invalid-feedback">
+              {errors.username && errors.username.message}
+            </div>
           </div>
           <div className="col-md-6 mb-3 mx-auto">
             <label for="inputPassword" className="form-label">
@@ -125,9 +138,12 @@ function RegistrationPage() {
             <input
               {...register("password")}
               type="password"
-              className="form-control"
+              className={`form-control ${errors.password ? "is-invalid" : ""}`}
               id="inputPassword"
             />
+            <div className="invalid-feedback">
+              {errors.password && errors.password.message}
+            </div>
           </div>
           <div className="col-md-6 mb-3 mx-auto">
             <label for="inputConfirmPassword" className="form-label">
@@ -139,7 +155,9 @@ function RegistrationPage() {
               className="form-control"
               id="inputConfirmPassword"
             />
+            <div className="invalid-feedback">sdf</div>
           </div>
+          <hr className="col-md-7 mx-auto my-4"></hr>
           <div className="col-md-6 mb-3 mx-auto">
             <label for="inputName" className="form-label">
               الاسم
@@ -202,6 +220,7 @@ function RegistrationPage() {
                 type="radio"
                 name="type"
                 id="individual"
+                value={"individual"}
                 checked={selectedOption === "individual"}
                 onChange={() => setSelectedOption("individual")}
               />
@@ -216,6 +235,7 @@ function RegistrationPage() {
                 type="radio"
                 name="type"
                 id="company"
+                value={"company"}
                 checked={selectedOption === "company"}
                 onChange={() => setSelectedOption("company")}
               />
@@ -235,7 +255,7 @@ function RegistrationPage() {
             </label>
             <input
               {...register("commercialRegister")}
-              type="number"
+              type="text"
               className="form-control"
               id="inputCommercialRegister"
             />
@@ -251,7 +271,7 @@ function RegistrationPage() {
             </label>
             <input
               {...register("taxNumber")}
-              type="number"
+              type="text"
               className="form-control"
               id="inputTaxNumber"
             />

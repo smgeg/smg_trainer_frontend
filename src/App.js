@@ -1,10 +1,14 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import React from "react";
 
-import Layout from "./components/global/Main";
 import CustomerForm from "./components/customers/customer_form";
 import RegistrationPage from "./components/registration/registration";
+import Login from "./components/login";
+import Navbar from "./components/global/navbar";
+import CourseList from "./components/courses/course_list";
+import Subscribe from "./components/courses/subscribe";
+import Successful from "./components/courses/successful";
 const App = ({ component: Component, rest }) => {
   return (
     // <Route
@@ -16,12 +20,19 @@ const App = ({ component: Component, rest }) => {
     //   )}
     // />
 
-    <BrowserRouter>
-      <Routes>
-        <Route exact path="/" element={<CustomerForm />} />
-        <Route exact path="/registration" element={<RegistrationPage />} />
-      </Routes>
-    </BrowserRouter>
+    <div>
+      <Navbar></Navbar>
+      <div className="container">
+        <Routes>
+          <Route path="/" element={<CustomerForm />} />
+          <Route path="/registration" element={<RegistrationPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/courses" element={<CourseList />} />
+          <Route path="/subscribe" element={<Subscribe />} />
+          <Route path="/successful" element={<Successful />} />
+        </Routes>
+      </div>
+    </div>
   );
 };
 
