@@ -2,6 +2,7 @@ import React from "react";
 import { ImLocation, ImClock, ImClock2 } from "react-icons/im";
 import { RiMoneyPoundCircleFill } from "react-icons/ri";
 import { MdPlayLesson } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 const CourseList = () => {
   const courses = [
     {
@@ -32,6 +33,7 @@ const CourseList = () => {
       img: "http://smgeg.com/template/img/course/55945012-b7cd-4290-8b20-3ac80f16ec40.jpg",
     },
   ];
+  const navigate = useNavigate();
   return (
     <div className="">
       <div className="fs-3 fw-bold mt-3">كورسات عامة</div>
@@ -113,9 +115,15 @@ const CourseList = () => {
                           </div>
                         </div>
                       </div>
-                      <a href="/subscribe" className="btn btn-danger">
+
+                      <div
+                        className="btn btn-danger"
+                        onClick={() => {
+                          navigate("/subscribe", { state: e });
+                        }}
+                      >
                         طلب الاشتراك
-                      </a>
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -2,6 +2,8 @@ import React from "react";
 import { ImLocation, ImClock } from "react-icons/im";
 import { RiMoneyPoundCircleFill } from "react-icons/ri";
 import { MdPlayLesson } from "react-icons/md";
+import { useLocation } from "react-router-dom";
+
 function Subscribe() {
   const courses = [
     {
@@ -14,9 +16,12 @@ function Subscribe() {
       img: "https://assets.entrepreneur.com/content/3x2/2000/20191218181212-Ent-Excel.jpeg",
     },
   ];
+  const location = useLocation();
+  const course = location.state;
+  console.log("STATE:", location.state);
   return (
     <div>
-      <h1 className="text-center mt-3">تأكيد اشتراك كورس اكسيل</h1>
+      <h1 className="text-center mt-3">تأكيد اشتراك {course.title}</h1>
       <div className="row  mt-3">
         {courses.map((e, key) => {
           return (
@@ -26,15 +31,17 @@ function Subscribe() {
                   <img
                     width={"200px"}
                     height={"200px"}
-                    src={e.img}
+                    src={course.img}
                     className="  object-fit-cover m-3"
                     alt="..."
                   />
                 </div>
                 <div className="col">
                   <div className="card-body">
-                    <h5 className="card-title fs-4 fw-bold mb-3">{e.title}</h5>
-                    <p className="card-text mb-3">{e.desc}</p>
+                    <h5 className="card-title fs-4 fw-bold mb-3">
+                      {course.title}
+                    </h5>
+                    <p className="card-text mb-3">{course.desc}</p>
                     <div className="row">
                       <div className="col-auto">
                         <div className="input-group mb-3 ">
@@ -46,7 +53,7 @@ function Subscribe() {
                           </span>
 
                           <span class="input-group-text rounded-0 rounded-start bg-white">
-                            {e.location}
+                            {course.location}
                           </span>
                         </div>
                       </div>
@@ -60,7 +67,7 @@ function Subscribe() {
                           </span>
 
                           <span class="input-group-text rounded-0 rounded-start bg-white">
-                            {e.no_of_lec}
+                            {course.no_of_lec}
                           </span>
                         </div>
                       </div>
@@ -74,7 +81,7 @@ function Subscribe() {
                           </span>
 
                           <span class="input-group-text rounded-0 rounded-start bg-white">
-                            {e.price}
+                            {course.price}
                           </span>
                         </div>
                       </div>
@@ -88,7 +95,7 @@ function Subscribe() {
                           </span>
 
                           <span class="input-group-text rounded-0 rounded-start bg-white">
-                            {e.no_of_hours}
+                            {course.no_of_hours}
                           </span>
                         </div>
                       </div>
