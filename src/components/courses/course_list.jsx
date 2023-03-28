@@ -1,39 +1,59 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ImLocation, ImClock, ImClock2 } from "react-icons/im";
 import { RiMoneyPoundCircleFill } from "react-icons/ri";
 import { MdPlayLesson } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 const CourseList = () => {
-  const courses = [
-    {
-      title: "كورس اكسيل",
-      desc: "تتناول دورة مايكروسوفت أوفيس كافة المبادئ والأدوات المستخدمة في حقيبة الأوفيس الإدارية بحيث يصبح المشارك في النهاية قادرا على الحد من الاعمال الورقية مع سرعة إنجاز العمل والخروج به بأحسن صورة ، فمن خلال مجموعة من المحاضرات على يد خبراء متخصصين سيتمكن الدارس من استخدام برامج الأوفيس بكل سهولة وتعلم أهم التعريفات في الإكسيل والوورد وكذلك الباور بونيت ، كما سنقوم بشرح وافي لأهم المعدلات المستخدمة في الإكسيل، وكذلك طريقة استخدام الشرائح التقديمية في الباور بوينت، وآلية كتابة المستندات بشكل احترافي كذلك.",
-      price: 1500,
-      no_of_lec: 12,
-      location: "مقر الشركة | اونلاين",
-      no_of_hours: 36,
-      img: "https://assets.entrepreneur.com/content/3x2/2000/20191218181212-Ent-Excel.jpeg",
-    },
-    {
-      title: "كورس HR",
-      desc: "تقدم الدورة فهماً شاملاً لمبادئ الموارد البشرية ووظائفها ، وكذلك واجبات قسم شؤون الموظفين ، وسيقوم المتدرب بتعليم المتدربين كيفية تنفيذ السياسات والإجراءات التنفيذية لإدارة جميع شؤون الموظفين وبعد ذلك كيفية إنشاء إدارة الرواتب والضوابط الفعالة مع التركيز القوي على التطبيق العملي في بيئة العمل ، أخيرًا ، سيعرف المتدرب كيفية إنشاء ورقة إكسل احترافية لتنفيذ أعمالهم وعمل المعادلات والجداول المحورية.",
-      price: 3000,
-      no_of_lec: 30,
-      location: "مقر الشركة | اونلاين",
-      no_of_hours: 100,
-      img: "https://www.simplilearn.com/ice9/free_resources_article_thumb/Top_10_HR_Concepts_And_Terms.jpg",
-    },
-    {
-      title: "ورشة عمل التدريب والتطوير",
-      desc: "  من خلال هذه الدورة ، سيتعرف المتدرب على الفرق بين التدريب والتطوير ، ويعرف فوائد التدريب والتطوير ، ثم كيفية تصميم خطة تدريب فعالة من خلال إجراء تقييم الاحتياجات التدريبية TNA لقياس وتقييم نتائج التدريب. أخيرًا ، كيفية قياس العائد على الاستثمار من التدريب - عائد الاستثمار.",
-      price: 500,
-      no_of_lec: 1,
-      location: "مقر الشركة | اونلاين",
-      no_of_hours: 6,
-      img: "http://smgeg.com/template/img/course/55945012-b7cd-4290-8b20-3ac80f16ec40.jpg",
-    },
-  ];
+  // const courses = [
+  //   {
+  //     title: "كورس اكسيل",
+  //     desc: "تتناول دورة مايكروسوفت أوفيس كافة المبادئ والأدوات المستخدمة في حقيبة الأوفيس الإدارية بحيث يصبح المشارك في النهاية قادرا على الحد من الاعمال الورقية مع سرعة إنجاز العمل والخروج به بأحسن صورة ، فمن خلال مجموعة من المحاضرات على يد خبراء متخصصين سيتمكن الدارس من استخدام برامج الأوفيس بكل سهولة وتعلم أهم التعريفات في الإكسيل والوورد وكذلك الباور بونيت ، كما سنقوم بشرح وافي لأهم المعدلات المستخدمة في الإكسيل، وكذلك طريقة استخدام الشرائح التقديمية في الباور بوينت، وآلية كتابة المستندات بشكل احترافي كذلك.",
+  //     price: 1500,
+  //     no_of_lec: 12,
+  //     location: "مقر الشركة | اونلاين",
+  //     no_of_hours: 36,
+  //     img: "https://assets.entrepreneur.com/content/3x2/2000/20191218181212-Ent-Excel.jpeg",
+  //   },
+  //   {
+  //     title: "كورس HR",
+  //     desc: "تقدم الدورة فهماً شاملاً لمبادئ الموارد البشرية ووظائفها ، وكذلك واجبات قسم شؤون الموظفين ، وسيقوم المتدرب بتعليم المتدربين كيفية تنفيذ السياسات والإجراءات التنفيذية لإدارة جميع شؤون الموظفين وبعد ذلك كيفية إنشاء إدارة الرواتب والضوابط الفعالة مع التركيز القوي على التطبيق العملي في بيئة العمل ، أخيرًا ، سيعرف المتدرب كيفية إنشاء ورقة إكسل احترافية لتنفيذ أعمالهم وعمل المعادلات والجداول المحورية.",
+  //     price: 3000,
+  //     no_of_lec: 30,
+  //     location: "مقر الشركة | اونلاين",
+  //     no_of_hours: 100,
+  //     img: "https://www.simplilearn.com/ice9/free_resources_article_thumb/Top_10_HR_Concepts_And_Terms.jpg",
+  //   },
+  //   {
+  //     title: "ورشة عمل التدريب والتطوير",
+  //     desc: "  من خلال هذه الدورة ، سيتعرف المتدرب على الفرق بين التدريب والتطوير ، ويعرف فوائد التدريب والتطوير ، ثم كيفية تصميم خطة تدريب فعالة من خلال إجراء تقييم الاحتياجات التدريبية TNA لقياس وتقييم نتائج التدريب. أخيرًا ، كيفية قياس العائد على الاستثمار من التدريب - عائد الاستثمار.",
+  //     price: 500,
+  //     no_of_lec: 1,
+  //     location: "مقر الشركة | اونلاين",
+  //     no_of_hours: 6,
+  //     img: "http://smgeg.com/template/img/course/55945012-b7cd-4290-8b20-3ac80f16ec40.jpg",
+  //   },
+  // ];
+
+  const [courses, setCourses] = useState([]);
+  useEffect(() => {
+    getCourses();
+  }, []);
+
+  const getCourses = async () => {
+    const response = await fetch("http://localhost:3005/api/courses/");
+    const data = await response.json();
+    setCourses(data);
+  };
   const navigate = useNavigate();
+
+  const handleSubscribe = ({ course: e }) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/subscribe", { state: e });
+    } else {
+      navigate("/login");
+    }
+  };
   return (
     <div className="">
       <div className="fs-3 fw-bold mt-3">كورسات عامة</div>
@@ -118,9 +138,7 @@ const CourseList = () => {
 
                       <div
                         className="btn btn-danger"
-                        onClick={() => {
-                          navigate("/subscribe", { state: e });
-                        }}
+                        // onClick={handleSubscribe({ course: e })}
                       >
                         طلب الاشتراك
                       </div>
