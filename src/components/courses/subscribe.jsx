@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ImLocation, ImClock } from "react-icons/im";
 import { RiMoneyPoundCircleFill } from "react-icons/ri";
 import { MdPlayLesson } from "react-icons/md";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
+
+import axios from "axios";
 
 function Subscribe() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const courses = [
     {
       title: "كورس اكسيل",
@@ -16,11 +24,49 @@ function Subscribe() {
       img: "https://assets.entrepreneur.com/content/3x2/2000/20191218181212-Ent-Excel.jpeg",
     },
   ];
-  const location = useLocation();
-  const course = location.state;
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login", { state: { ...location.state, from: location } });
+    }
+  });
+  const user = JSON.parse(localStorage.getItem("user"));
+  const apiUrl = process.env.REACT_APP_BACKEND_URL;
+  const handleSubscribe = async () => {
+    console.log({
+      course_code: location.state,
+      customer_code: user.code,
+    });
+    const subs = await axios.get(`${apiUrl}/api/subscriptions`);
+    const filteredSubs = subs.data.filter((course) => {
+      return (
+        course.course.code === location.state.course.code &&
+        course.customer.code === user.code
+      );
+    });
+    if (filteredSubs.length > 0) {
+      NotificationManager.warning(" تم اشتراك في هذا الكورس بالفعل", "");
+    } else {
+      const res = await axios.post(`${apiUrl}/api/subscriptions`, {
+        course_code: location.state.course.code,
+        customer_code: user.code,
+      });
+
+      console.log("RES", res.status);
+      if (res.status === 201) {
+        // TODO: Send Email and SMS
+        navigate("/successful");
+      } else {
+        NotificationManager.error("خطأ", res?.arTitle);
+      }
+    }
+  };
+  const course = location.state.course;
   console.log("STATE:", location.state);
   return (
     <div>
+      <NotificationContainer />
       <h1 className="text-center mt-3">تأكيد اشتراك {course.title}</h1>
       <div className="row  mt-3">
         {courses.map((e, key) => {
@@ -100,9 +146,9 @@ function Subscribe() {
                         </div>
                       </div>
                     </div>
-                    <a href="/successful" className="btn btn-danger">
+                    <div className="btn btn-danger" onClick={handleSubscribe}>
                       تأكيد الاشتراك
-                    </a>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -1,13 +1,19 @@
 html.rtl{
   direction: rtl;
 }
+#root{
+  height: 100vh;
+}
 body {
   margin: 0 !important;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Cairo', sans-serif !important;
+  height: 100vh !important;
+  /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing:
+   antialiased;
+  -moz-osx-font-smoothing: grayscale; */
 }
 
 code {
@@ -27,4 +33,18 @@ code {
 
 .ant-menu-title-content{
   flex: none !important;
+}
+
+
+.notification-container {
+  width: 400px!important;
+  padding:15px!important;
+}
+
+.notification-container .notification{
+  opacity: 1;
+}
+
+.avatar-dropdown .dropdown-item{
+text-align: start !important;
 }

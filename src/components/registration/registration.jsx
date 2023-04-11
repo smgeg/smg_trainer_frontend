@@ -3,15 +3,26 @@ import { useForm } from "react-hook-form";
 import Navbar from "../global/navbar";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import axios from "axios";
+import {
+  NotificationManager,
+  NotificationContainer,
+} from "react-notifications";
+import { useNavigate } from "react-router-dom";
+
 function RegistrationPage() {
   const formSchema = Yup.object().shape({
     username: Yup.string().required("مطلوب اسم المستخدم"),
     password: Yup.string()
       .required("مطلوب كلمة المرور")
-      .min(3, "Password must be at 3 char long"),
+      .min(3, "كلمة المرور لا تقل عن 3 احرف"),
     confirmPassword: Yup.string()
       .required("مطلوب تأكيد كلمة المرور")
       .oneOf([Yup.ref("password")], "كلمة المرور غير متطابقة"),
+    name: Yup.string().required("مطلوب الاسم الثلاثي"),
+    phone: Yup.string()
+      .required("مطلوب رقم الموبايل ")
+      .length(11, "رقم الموبايل غير صحيح , رقم الموبايل يتكون من 11 رقم"),
   });
   const formOptions = { resolver: yupResolver(formSchema) };
   const {
@@ -19,13 +30,33 @@ function RegistrationPage() {
     handleSubmit,
     formState: { errors },
   } = useForm(formOptions);
-
-  const onSubmit = (data) => {
-    console.log(data, errors);
+  const navigate = useNavigate();
+  const onSubmit = async (data) => {
+    try {
+      console.log(data, errors);
+      const { confirmPassword, ...newData } = data;
+      const res = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/customers`,
+        newData
+      );
+      console.log(res.status);
+      if (res.status === 201) {
+        NotificationManager.success("تم انشاء الحساب ");
+        navigate("/login");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 409) {
+        NotificationManager.warning("اسم المستخدم موجود بالفعل");
+        console.log(error.response);
+      } else {
+        NotificationManager.error("حدث خطأ ما");
+        console.log(error);
+      }
+    }
   };
 
   const [selectedOption, setSelectedOption] = useState("individual");
-  const [selectedGovernorate, setSelectedGovernorate] = useState("اختر...");
+  const [selectedGovernorate, setSelectedGovernorate] = useState("");
   const governorate = [
     { id: "1", governorate_name_ar: "القاهرة", governorate_name_en: "Cairo" },
     { id: "2", governorate_name_ar: "الجيزة", governorate_name_en: "Giza" },
@@ -152,22 +183,44 @@ function RegistrationPage() {
             <input
               {...register("confirmPassword")}
               type="password"
-              className="form-control"
+              className={`form-control ${
+                errors.confirmPassword ? "is-invalid" : ""
+              }`}
               id="inputConfirmPassword"
             />
-            <div className="invalid-feedback">sdf</div>
+            <div className="invalid-feedback">
+              {errors.confirmPassword && errors.confirmPassword.message}
+            </div>
           </div>
           <hr className="col-md-7 mx-auto my-4"></hr>
           <div className="col-md-6 mb-3 mx-auto">
             <label for="inputName" className="form-label">
-              الاسم
+              الاسم الثلاثي
             </label>
             <input
               {...register("name")}
               type="text"
-              className="form-control"
+              className={`form-control ${errors.name ? "is-invalid" : ""}`}
               id="inputName"
             />
+            <div className="invalid-feedback">
+              {errors.name && errors.name.message}
+            </div>
+          </div>
+
+          <div className="col-md-6 mb-3 mx-auto">
+            <label for="inputPhone" className="form-label">
+              موبايل (واتس)
+            </label>
+            <input
+              {...register("phone")}
+              type="tel"
+              className={`form-control ${errors.phone ? "is-invalid" : ""}`}
+              id="inputPhone"
+            />
+            <div className="invalid-feedback">
+              {errors.phone && errors.phone.message}
+            </div>
           </div>
           <div className="col-md-6 mb-3 mx-auto">
             <label for="inputEmail" className="form-label">
@@ -182,18 +235,6 @@ function RegistrationPage() {
           </div>
           <div className="col-md-6 mb-3 mx-auto">
             <label for="inputPhone" className="form-label">
-              موبايل (واتس)
-            </label>
-            <input
-              {...register("phone")}
-              type="tel"
-              className="form-control"
-              id="inputPhone"
-            />
-          </div>
-
-          <div className="col-md-6 mb-3 mx-auto">
-            <label for="inputPhone" className="form-label">
               المحاقظة
             </label>
             <select
@@ -205,7 +246,8 @@ function RegistrationPage() {
                 setSelectedGovernorate(event.target.value);
               }}
             >
-              <option selected>اختر ...</option>
+              <option selected></option>
+
               {governorate.map((e, key) => {
                 return <option key={key}>{e.governorate_name_ar}</option>;
               })}
@@ -254,7 +296,7 @@ function RegistrationPage() {
               رقم السجل التجاري
             </label>
             <input
-              {...register("commercialRegister")}
+              {...register("commercialRegistration")}
               type="text"
               className="form-control"
               id="inputCommercialRegister"
@@ -286,6 +328,7 @@ function RegistrationPage() {
           <p>Copyright © 2023</p>
         </footer>
       </div>
+      <NotificationContainer />
     </div>
   );
 }
