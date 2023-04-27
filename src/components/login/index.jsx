@@ -45,6 +45,12 @@ const Login = () => {
           "اسم المستخدم او كلمة المرور غير صحيح",
           "خطأ"
         );
+      }else {
+        console.error(error);
+        NotificationManager.error(
+          `${error}`,
+          `خطأ - ${error.response.status}`
+        );
       }
     } finally {
       setLoading(false);

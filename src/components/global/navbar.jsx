@@ -5,7 +5,6 @@ import logo from "../../assets/logo.png";
 import React, { useContext } from "react";
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import UserAvatar from "./avatar";
-import { Image } from "@chakra-ui/react";
 import LoginRegButton from "./loginRegButton";
 import UserContext from "../../context/UserContext";
 

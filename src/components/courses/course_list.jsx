@@ -4,7 +4,7 @@ import { RiMoneyPoundCircleFill } from "react-icons/ri";
 import { MdPlayLesson } from "react-icons/md";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-
+import defaultImage from "../../assets/default_image.jpg";
 const CourseList = () => {
   const [courses, setCourses] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
@@ -68,11 +68,12 @@ const CourseList = () => {
                   <div className="row">
                     <div className="col-3 rounded-circle">
                       <img
+                        style={{ objectFit: "contain" }}
                         width={"250px"}
                         height={"250px"}
-                        src={e.img}
+                        src={e.img || defaultImage}
                         className="object-fit-cover m-3"
-                        alt="..."
+                        alt="صورة الكورس"
                       />
                     </div>
                     <div className="col">

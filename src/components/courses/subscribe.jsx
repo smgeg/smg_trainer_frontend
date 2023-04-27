@@ -51,6 +51,7 @@ function Subscribe() {
       const res = await axios.post(`${apiUrl}/api/subscriptions`, {
         course_code: location.state.course.code,
         customer_code: user.code,
+        status: "pending",
       });
 
       console.log("RES", res.status);
